@@ -23,6 +23,15 @@ function text(content)
     DrawText(0.9,0.7)
 end
 
+function displayTimer(duration)
+    local time = 0
+    while time < duration * 100 do
+        Citizen.Wait(0)
+        time = time + 1
+        text(math.ceil(time / 100))
+    end
+end
+
 function  unlockNearestCar()
     --[[Finding the closest vehicle in a 2m radius]]--
     local vehicle = GetClosestVehicle(GetEntityCoords(PlayerPedId()), 2.0, 0, 70)
@@ -30,12 +39,8 @@ function  unlockNearestCar()
     if vehicle then
         if DoesEntityExist(vehicle) then
             if GetVehicleDoorLockStatus(vehicle) ~= 1 then
-                local time = 0
-                while time < 10 do
-                    Citizen.Wait(1000)
-                    time = time + 1
-                end
-                text(time)
+
+                displayTimer(10)
 
                 SetVehicleDoorsLocked(vehicle, 1)
                 SetVehicleDoorsLockedForPlayer(vehicle, PlayerId(), false)
