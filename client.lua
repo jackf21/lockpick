@@ -14,34 +14,44 @@ function Alert(msg)
     DisplayHelpTextFromStringLabel(0, 0, 1, -1)
 end
 
+function text(content) 
+    SetTextFont(0)
+    SetTextProportional(0)
+    SetTextScale(1.9,1.9)
+    SetTextEntry("STRING")
+    AddTextComponentString(content)
+    DrawText(0.9,0.7)
+end
+
 function  unlockNearestCar()
     --[[Finding the closest vehicle in a 2m radius]]--
     local vehicle = GetClosestVehicle(GetEntityCoords(PlayerPedId()), 2.0, 0, 70)
+    local farvehicle = GetClosestVehicle(GetEntityCoords(PlayerPedId()), 10.0, 0, 70)
     if vehicle then
         if DoesEntityExist(vehicle) then
             if GetVehicleDoorLockStatus(vehicle) ~= 1 then
-
-                --[[Playing the lockpick animation on the player]]--
-                Citizen.CreateThread(function()
-                    local pid = PlayerPedId()
-                    RequestAnimDict("random")
-                    RequestAnimDict("random@arrests")
-                    RequestAnimDict("random@arrests@busted")
-                    while (not HasAnimDictLoaded("random@arrests@busted")) do Citizen.Wait(0) end
-                    TaskPlayAnim(pid,"random@arrests","idle_2_hands_up",1.0,-1.0, 5000, 0, 1, true, true, true)
-                end)
+                local time = 0
+                while time < 10 do
+                    Citizen.Wait(1000)
+                    time = time + 1
+                end
+                text(time)
 
                 SetVehicleDoorsLocked(vehicle, 1)
                 SetVehicleDoorsLockedForPlayer(vehicle, PlayerId(), false)
                 SetVehicleDoorsLockedForAllPlayers(vehicle, false)
+                Alert("Vehicle unlocked")
                 return
             else
                 Alert("Vehicle already unlocked")
                 return
             end
+        elseif DoesEntityExist(farvehicle) then
+            Alert("Get closer to the vehicle")
+            return
+        else
+            Alert("No vehicle found")
+            return
         end
-    else
-        Alert("No vehicle found")
-        return
     end
 end
