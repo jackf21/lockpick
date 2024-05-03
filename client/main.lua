@@ -37,7 +37,6 @@ AddEventHandler('InteractSound_CL:PlayWithinDistance', function(playerNetId, max
     end
 end)
 
-
 function  unlockNearestCar()
     --[[Finding the closest vehicle in a 2m radius]]--
     local vehicle = GetClosestVehicle(GetEntityCoords(PlayerPedId()), 2.0, 0, 70)
@@ -45,7 +44,7 @@ function  unlockNearestCar()
     if vehicle then
         if DoesEntityExist(vehicle) then
             if GetVehicleDoorLockStatus(vehicle) ~= 1 then
-
+                TriggerServerEvent('InteractSound_SV:PlayWithinDistance', 20, 'backup', 1)
                 local time = 0
                 while time < 1000 do
                     vehicle = GetClosestVehicle(GetEntityCoords(PlayerPedId()), 2.0, 0, 70)
